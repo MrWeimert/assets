@@ -1,0 +1,71 @@
+{
+  "generated_at": "2026-07-27T13:00:00-05:00",
+  "note": "Populated by scheduled tasks. Daily commit check updates repos[]. Mon/Thu keepalive updates supabase[].",
+  "repos": {
+    "linkedin-content-engine": {
+      "url": "https://github.com/MrWeimert/linkedin-content-engine",
+      "last_commit_sha": null,
+      "last_commit_at": null,
+      "last_commit_message": null,
+      "last_checked_at": null
+    },
+    "bam-os": {
+      "url": "https://github.com/MrWeimert/bam-os",
+      "last_commit_sha": null,
+      "last_commit_at": null,
+      "last_commit_message": null,
+      "last_checked_at": null
+    },
+    "epd-commerce-documentation": {
+      "url": "https://github.com/EasyPayDirect/epd-commerce-documentation",
+      "last_commit_sha": null,
+      "last_commit_at": null,
+      "last_commit_message": null,
+      "last_checked_at": null
+    },
+    "yourautopod": {
+      "url": "https://github.com/MrWeimert/yourautopod",
+      "last_commit_sha": null,
+      "last_commit_at": null,
+      "last_commit_message": null,
+      "last_checked_at": null
+    },
+    "health-pipeline": {
+      "url": "https://github.com/MrWeimert/health-pipeline",
+      "last_commit_sha": null,
+      "last_commit_at": null,
+      "last_commit_message": null,
+      "last_checked_at": null
+    },
+    "merchantalternatives": {
+      "url": "https://github.com/merchantalternatives/merchantalternatives",
+      "last_commit_sha": null,
+      "last_commit_at": null,
+      "last_commit_message": null,
+      "last_checked_at": null
+    }
+  },
+  "supabase": {
+    "mrmohawk": {
+      "host": "foarmmcezmmhnaexykcp.supabase.co",
+      "plan": "free",
+      "last_keepalive_at": null,
+      "last_keepalive_status": null,
+      "days_since_keepalive": null
+    },
+    "linkedin-engine": {
+      "host": "db.zijzgrnvvnpusaexvpsf.supabase.co",
+      "plan": "pro",
+      "note": "Pro plan — pause protection not required. Keepalive still runs.",
+      "last_keepalive_at": null,
+      "last_keepalive_status": null
+    },
+    "bam-os": {
+      "host": "db.rbqrnawgykdstdmzhtyo.supabase.co",
+      "plan": "pro",
+      "note": "Pro plan — pause protection not required. Keepalive still runs.",
+      "last_keepalive_at": null,
+      "last_keepalive_status": null
+    }
+  }
+}
