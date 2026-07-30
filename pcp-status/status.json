@@ -51,23 +51,23 @@
   "supabase": {
     "bam-os": {
       "host": "db.rbqrnawgykdstdmzhtyo.supabase.co",
-      "last_keepalive_at": null,
-      "last_keepalive_status": null,
+      "last_keepalive_at": "2026-07-30T08:09:40-05:00",
+      "last_keepalive_status": "ok",
       "note": "Pro plan \u2014 pause protection not required. Keepalive still runs.",
       "plan": "pro"
     },
     "linkedin-engine": {
       "host": "db.zijzgrnvvnpusaexvpsf.supabase.co",
-      "last_keepalive_at": null,
-      "last_keepalive_status": null,
+      "last_keepalive_at": "2026-07-30T08:09:40-05:00",
+      "last_keepalive_status": "ok",
       "note": "Pro plan \u2014 pause protection not required. Keepalive still runs.",
       "plan": "pro"
     },
     "mrmohawk": {
       "days_since_keepalive": null,
       "host": "foarmmcezmmhnaexykcp.supabase.co",
-      "last_keepalive_at": null,
-      "last_keepalive_status": null,
+      "last_keepalive_at": "2026-07-30T08:09:40-05:00",
+      "last_keepalive_status": "ok",
       "plan": "free"
     }
   }
