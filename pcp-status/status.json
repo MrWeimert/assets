@@ -51,14 +51,14 @@
   "supabase": {
     "bam-os": {
       "host": "db.rbqrnawgykdstdmzhtyo.supabase.co",
-      "last_keepalive_at": "2026-07-30T08:09:40-05:00",
+      "last_keepalive_at": "2026-08-03T08:09:26-05:00",
       "last_keepalive_status": "ok",
       "note": "Pro plan — pause protection not required. Keepalive still runs.",
       "plan": "pro"
     },
     "linkedin-engine": {
       "host": "db.zijzgrnvvnpusaexvpsf.supabase.co",
-      "last_keepalive_at": "2026-07-30T08:09:40-05:00",
+      "last_keepalive_at": "2026-08-03T08:09:26-05:00",
       "last_keepalive_status": "ok",
       "note": "Pro plan — pause protection not required. Keepalive still runs.",
       "plan": "pro"
@@ -66,8 +66,8 @@
     "mrmohawk": {
       "days_since_keepalive": null,
       "host": "foarmmcezmmhnaexykcp.supabase.co",
-      "last_keepalive_at": "2026-07-30T08:09:40-05:00",
-      "last_keepalive_status": "ok",
+      "last_keepalive_at": "2026-08-03T08:09:26-05:00",
+      "last_keepalive_status": "error: curl exit 7; proxy CONNECT returned HTTP 403 (credential unavailable)",
       "plan": "free"
     }
   }
