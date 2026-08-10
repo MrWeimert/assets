@@ -1,0 +1,81 @@
+name: Update PCP status
+
+# Fired by source repos via repository_dispatch (event_type: pcp-push).
+# Also runnable manually for backfill.
+on:
+  repository_dispatch:
+    types: [pcp-push]
+  workflow_dispatch:
+    inputs:
+      repo_key:
+        description: 'Repo key in status.json (e.g. linkedin-content-engine)'
+        required: true
+      commit_sha:
+        description: 'Commit SHA (full or short)'
+        required: true
+      commit_at:
+        description: 'ISO 8601 commit timestamp'
+        required: true
+      commit_message:
+        description: 'Commit message (first line)'
+        required: true
+      repo_url:
+        description: 'GitHub repo URL'
+        required: true
+
+concurrency:
+  group: pcp-status
+  cancel-in-progress: false
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Update status.json
+        env:
+          REPO_KEY: ${{ github.event.client_payload.repo_key || inputs.repo_key }}
+          COMMIT_SHA: ${{ github.event.client_payload.commit_sha || inputs.commit_sha }}
+          COMMIT_AT: ${{ github.event.client_payload.commit_at || inputs.commit_at }}
+          COMMIT_MESSAGE: ${{ github.event.client_payload.commit_message || inputs.commit_message }}
+          REPO_URL: ${{ github.event.client_payload.repo_url || inputs.repo_url }}
+        run: |
+          python3 <<'PY'
+          import json, os, datetime
+          from pathlib import Path
+
+          path = Path("pcp-status/status.json")
+          data = json.loads(path.read_text())
+
+          key = os.environ["REPO_KEY"]
+          entry = data["repos"].setdefault(key, {"url": os.environ["REPO_URL"]})
+          entry["url"] = os.environ["REPO_URL"]
+          entry["last_commit_sha"] = os.environ["COMMIT_SHA"][:7]
+          entry["last_commit_at"] = os.environ["COMMIT_AT"]
+          entry["last_commit_message"] = os.environ["COMMIT_MESSAGE"][:80]
+          entry["last_checked_at"] = datetime.date.today().isoformat()
+          entry.pop("note", None)
+
+          # America/Chicago timestamp (CDT = -05:00 in DST, CST = -06:00 otherwise).
+          # August in Chicago = DST = -05:00.
+          now = datetime.datetime.now(datetime.timezone(datetime.timedelta(hours=-5)))
+          data["generated_at"] = now.isoformat(timespec="seconds")
+
+          path.write_text(json.dumps(data, indent=2) + "\n")
+          print(f"Updated {key}: {entry['last_commit_sha']} {entry['last_commit_message']}")
+          PY
+
+      - name: Commit and push
+        run: |
+          git config user.email "brad@easypaydirect.com"
+          git config user.name "PCP status bot"
+          git add pcp-status/status.json
+          if git diff --staged --quiet; then
+            echo "No changes to commit."
+            exit 0
+          fi
+          git commit -m "PCP status: ${{ github.event.client_payload.repo_key || inputs.repo_key }} ${{ github.event.client_payload.commit_sha || inputs.commit_sha }}"
+          git push
