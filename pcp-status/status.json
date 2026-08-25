@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-25T07:05:59-05:00",
+  "generated_at": "2026-08-25T07:06:34-05:00",
   "note": "Populated by scheduled tasks. Daily commit check updates repos[]. Mon/Thu keepalive updates supabase[].",
   "repos": {
     "bam-os": {
@@ -13,7 +13,7 @@
     "epd-commerce-documentation": {
       "last_checked_at": "2026-08-25",
       "last_commit_at": "2026-05-11T06:27:00Z",
-      "last_commit_message": "Merge pull request #1 from EasyPayDirect/EC-413-team-member-docs\\n\\ndocs(EC-413)",
+      "last_commit_message": "Merge pull request #1 from EasyPayDirect/EC-413-team-member-docs",
       "last_commit_sha": "cb54634",
       "url": "https://github.com/EasyPayDirect/epd-commerce-documentation"
     },
@@ -27,7 +27,7 @@
     "linkedin-content-engine": {
       "last_checked_at": "2026-08-25",
       "last_commit_at": "2026-06-29T14:07:44Z",
-      "last_commit_message": "Update team alert copy: label both engagement groups (#24)\\n\\nWas:\\n  Another Li",
+      "last_commit_message": "Update team alert copy: label both engagement groups (#24)",
       "last_commit_sha": "20f52a6",
       "url": "https://github.com/MrWeimert/linkedin-content-engine"
     },
