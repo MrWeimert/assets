@@ -1,15 +1,7 @@
 {
-  "generated_at": "2026-08-28T07:29:34-05:00",
+  "generated_at": "2026-08-28T07:45:40-05:00",
   "note": "Populated by scheduled tasks. Daily commit check updates repos[]. Mon/Thu keepalive updates supabase[].",
   "repos": {
-    "bam-os": {
-      "last_checked_at": "2026-08-28",
-      "last_commit_at": null,
-      "last_commit_message": null,
-      "last_commit_sha": null,
-      "note": "repo not found or inaccessible",
-      "url": "https://github.com/MrWeimert/bam-os"
-    },
     "epd-commerce-documentation": {
       "last_checked_at": "2026-08-28",
       "last_commit_at": "2026-05-11T06:27:00Z",
@@ -32,20 +24,18 @@
       "url": "https://github.com/MrWeimert/linkedin-content-engine"
     },
     "merchantalternatives": {
-      "last_checked_at": "2026-08-28",
-      "last_commit_at": null,
-      "last_commit_message": null,
-      "last_commit_sha": null,
-      "note": "repo not found or inaccessible",
-      "url": "https://github.com/merchantalternatives/merchantalternatives"
+      "source": "wordpress-rest",
+      "url": "https://merchantalternatives.com",
+      "last_activity_at": "2026-07-12T17:06:12",
+      "last_activity_kind": "post",
+      "last_activity_title": "Easy Pay Direct vs Stripe: Which Should You Choose?",
+      "last_activity_link": "https://merchantalternatives.com/easy-pay-direct-vs-stripe/",
+      "last_activity_slug": "easy-pay-direct-vs-stripe",
+      "last_checked_at": "2026-08-28"
     },
     "yourautopod": {
       "last_checked_at": "2026-08-28",
-      "last_commit_at": null,
-      "last_commit_message": null,
-      "last_commit_sha": null,
-      "note": "repo not found or inaccessible",
-      "url": "https://github.com/MrWeimert/yourautopod"
+      "url": "https://github.com/MrWeimert/autopod-landing"
     }
   },
   "supabase": {
