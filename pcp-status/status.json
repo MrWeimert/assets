@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-28T07:45:40-05:00",
+  "generated_at": "2026-08-28T07:50:43-05:00",
   "note": "Populated by scheduled tasks. Daily commit check updates repos[]. Mon/Thu keepalive updates supabase[].",
   "repos": {
     "epd-commerce-documentation": {
@@ -35,7 +35,10 @@
     },
     "yourautopod": {
       "last_checked_at": "2026-08-28",
-      "url": "https://github.com/MrWeimert/autopod-landing"
+      "url": "https://github.com/MrWeimert/Autopod",
+      "last_commit_sha": "9f32725",
+      "last_commit_at": "2026-08-27T15:23:45Z",
+      "last_commit_message": "chore: redeploy with GEMINI_MODEL=gemini-3.6-flash (#101)"
     }
   },
   "supabase": {
