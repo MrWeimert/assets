@@ -1,0 +1,81 @@
+name: MrMohawk Supabase keepalive
+
+# Runs Mon + Thu at 13:00 UTC (8am CT) — same cadence as the retired Perplexity cron.
+# Prevents free-tier pause by writing to public._keepalive.
+on:
+  schedule:
+    - cron: '0 13 * * 1,4'
+  workflow_dispatch: {}
+
+jobs:
+  keepalive:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout assets
+        uses: actions/checkout@v4
+
+      - name: PATCH _keepalive row
+        id: patch
+        env:
+          SUPABASE_KEY: ${{ secrets.MRMOHAWK_SUPABASE_KEY }}
+        run: |
+          set -euo pipefail
+          NOW_ISO=$(TZ=America/Chicago date -Iseconds)
+          echo "now=$NOW_ISO" >> "$GITHUB_OUTPUT"
+
+          HTTP_CODE=$(curl -sS -o /tmp/resp.json -w '%{http_code}' \
+            -X PATCH \
+            "https://foarmmcezmmhnaexykcp.supabase.co/rest/v1/_keepalive?id=eq.1" \
+            -H "apikey: $SUPABASE_KEY" \
+            -H "Authorization: Bearer $SUPABASE_KEY" \
+            -H "Content-Type: application/json" \
+            -H "Prefer: return=representation" \
+            -d "{\"last_ping_at\":\"$NOW_ISO\"}")
+
+          echo "http_code=$HTTP_CODE" >> "$GITHUB_OUTPUT"
+          echo "HTTP $HTTP_CODE"
+          cat /tmp/resp.json
+          echo
+
+          # Fail loudly if not 2xx or if response is empty (silent write failure).
+          if [[ "$HTTP_CODE" != 2* ]]; then
+            echo "::error::MrMohawk keepalive failed with HTTP $HTTP_CODE"
+            exit 1
+          fi
+          if ! grep -q '"id":1' /tmp/resp.json; then
+            echo "::error::Response did not contain id:1 — write did not commit"
+            exit 1
+          fi
+
+      - name: Update status.json
+        env:
+          NOW_ISO: ${{ steps.patch.outputs.now }}
+        run: |
+          set -euo pipefail
+          python3 <<'PY'
+          import json, os, pathlib
+          p = pathlib.Path("pcp-status/status.json")
+          d = json.loads(p.read_text())
+          now = os.environ["NOW_ISO"]
+          sb = d.setdefault("supabase", {})
+          entry = sb.setdefault("mrmohawk", {})
+          entry["last_keepalive_at"] = now
+          entry["last_keepalive_status"] = "ok"
+          d["generated_at"] = now
+          p.write_text(json.dumps(d, indent=2) + "\n")
+          PY
+
+      - name: Commit + push
+        run: |
+          set -euo pipefail
+          git config user.email "brad@easypaydirect.com"
+          git config user.name "MrWeimert"
+          git add pcp-status/status.json
+          if git diff --cached --quiet; then
+            echo "No status.json change to commit"
+            exit 0
+          fi
+          git commit -m "MrMohawk keepalive: refresh timestamp"
+          git push origin main
