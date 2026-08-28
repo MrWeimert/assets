@@ -1,0 +1,110 @@
+name: MerchantAlternatives site activity poll
+
+# Polls the MerchantAlternatives WordPress site once a day for the freshest
+# post or page modification and writes it into status.json under
+# repos.merchantalternatives. Uses the "Perplexing API Auth" plugin's
+# X-Perplexing-Token header to bypass Cloudflare's bot challenge.
+on:
+  schedule:
+    - cron: '0 12 * * *'  # 07:00 CT (same time as commit-check era)
+  workflow_dispatch: {}
+
+concurrency:
+  group: pcp-status
+  cancel-in-progress: false
+
+jobs:
+  poll:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Fetch latest activity
+        id: fetch
+        env:
+          TOKEN: ${{ secrets.MA_PERPLEXING_TOKEN }}
+        run: |
+          set -euo pipefail
+          UA="PCP-Status-Checker/1.0"
+          BASE="https://merchantalternatives.com/wp-json/wp/v2"
+          FIELDS="id,title,modified,link,slug,status"
+
+          curl -sS -f -o /tmp/posts.json \
+            "$BASE/posts?per_page=1&orderby=modified&order=desc&status=publish&_fields=$FIELDS" \
+            -H "X-Perplexing-Token: $TOKEN" -H "User-Agent: $UA"
+          curl -sS -f -o /tmp/pages.json \
+            "$BASE/pages?per_page=1&orderby=modified&order=desc&status=publish&_fields=$FIELDS" \
+            -H "X-Perplexing-Token: $TOKEN" -H "User-Agent: $UA"
+
+          cat /tmp/posts.json
+          echo
+          cat /tmp/pages.json
+
+      - name: Update status.json
+        run: |
+          set -euo pipefail
+          python3 <<'PY'
+          import json, datetime
+          from pathlib import Path
+
+          posts = json.loads(Path("/tmp/posts.json").read_text())
+          pages = json.loads(Path("/tmp/pages.json").read_text())
+
+          def pick(items, kind):
+              if not items:
+                  return None
+              it = items[0]
+              return {
+                  "kind": kind,
+                  "modified": it["modified"],  # e.g. 2026-07-12T17:06:12 (site-local, no TZ)
+                  "title": it["title"]["rendered"],
+                  "link": it["link"],
+                  "slug": it["slug"],
+              }
+
+          candidates = [c for c in (pick(posts, "post"), pick(pages, "page")) if c]
+          fresh = max(candidates, key=lambda c: c["modified"]) if candidates else None
+
+          path = Path("pcp-status/status.json")
+          data = json.loads(path.read_text())
+          entry = data["repos"].setdefault("merchantalternatives", {})
+          entry.pop("note", None)
+          entry.pop("last_commit_sha", None)
+          entry.pop("last_commit_at", None)
+          entry.pop("last_commit_message", None)
+
+          entry["source"] = "wordpress-rest"
+          entry["url"] = "https://merchantalternatives.com"
+          entry["last_checked_at"] = datetime.date.today().isoformat()
+
+          if fresh:
+              entry["last_activity_at"] = fresh["modified"]
+              entry["last_activity_kind"] = fresh["kind"]
+              entry["last_activity_title"] = fresh["title"][:120]
+              entry["last_activity_link"] = fresh["link"]
+              entry["last_activity_slug"] = fresh["slug"]
+          else:
+              entry["last_activity_at"] = None
+              entry["note"] = "no posts or pages returned"
+
+          now = datetime.datetime.now(datetime.timezone(datetime.timedelta(hours=-5)))
+          data["generated_at"] = now.isoformat(timespec="seconds")
+
+          path.write_text(json.dumps(data, indent=2) + "\n")
+          print("Wrote:", json.dumps(entry, indent=2))
+          PY
+
+      - name: Commit and push
+        run: |
+          set -euo pipefail
+          git config user.email "brad@easypaydirect.com"
+          git config user.name "MrWeimert"
+          git add pcp-status/status.json
+          if git diff --cached --quiet; then
+            echo "No status.json change."
+            exit 0
+          fi
+          git commit -m "MerchantAlternatives poll: refresh site activity"
+          git push origin main
