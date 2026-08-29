@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-29T07:05:22-05:00",
+  "generated_at": "2026-08-29T07:11:05-05:00",
   "note": "Populated by scheduled tasks. Daily commit check updates repos[]. Mon/Thu keepalive updates supabase[].",
   "repos": {
     "epd-commerce-documentation": {
@@ -31,7 +31,7 @@
       "last_activity_title": "Easy Pay Direct vs Stripe: Which Should You Choose?",
       "last_activity_link": "https://merchantalternatives.com/easy-pay-direct-vs-stripe/",
       "last_activity_slug": "easy-pay-direct-vs-stripe",
-      "last_checked_at": "2026-08-28"
+      "last_checked_at": "2026-08-29"
     },
     "yourautopod": {
       "last_checked_at": "2026-08-29",
