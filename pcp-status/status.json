@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-30T07:03:10-05:00",
+  "generated_at": "2026-08-30T07:12:38-05:00",
   "note": "Populated by scheduled tasks. Daily commit check updates repos[]. Mon/Thu keepalive updates supabase[].",
   "repos": {
     "epd-commerce-documentation": {
@@ -31,7 +31,7 @@
       "last_activity_title": "Easy Pay Direct vs Stripe: Which Should You Choose?",
       "last_activity_link": "https://merchantalternatives.com/easy-pay-direct-vs-stripe/",
       "last_activity_slug": "easy-pay-direct-vs-stripe",
-      "last_checked_at": "2026-08-29"
+      "last_checked_at": "2026-08-30"
     },
     "yourautopod": {
       "last_checked_at": "2026-08-30",
@@ -46,14 +46,14 @@
       "host": "db.rbqrnawgykdstdmzhtyo.supabase.co",
       "last_keepalive_at": "2026-08-27T08:05:56-05:00",
       "last_keepalive_status": "ok",
-      "note": "Pro plan \u2014 pause protection not required. Keepalive still runs.",
+      "note": "Pro plan — pause protection not required. Keepalive still runs.",
       "plan": "pro"
     },
     "linkedin-engine": {
       "host": "db.zijzgrnvvnpusaexvpsf.supabase.co",
       "last_keepalive_at": "2026-08-27T08:05:56-05:00",
       "last_keepalive_status": "ok",
-      "note": "Pro plan \u2014 pause protection not required. Keepalive still runs.",
+      "note": "Pro plan — pause protection not required. Keepalive still runs.",
       "plan": "pro"
     },
     "mrmohawk": {
