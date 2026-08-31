@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-31T07:28:01-05:00",
+  "generated_at": "2026-08-31T14:24:39-05:00",
   "note": "Populated by scheduled tasks. Daily commit check updates repos[]. Mon/Thu keepalive updates supabase[].",
   "repos": {
     "epd-commerce-documentation": {
@@ -46,20 +46,20 @@
       "host": "db.rbqrnawgykdstdmzhtyo.supabase.co",
       "last_keepalive_at": "2026-08-27T08:05:56-05:00",
       "last_keepalive_status": "ok",
-      "note": "Pro plan — pause protection not required. Keepalive still runs.",
+      "note": "Pro plan \u2014 pause protection not required. Keepalive still runs.",
       "plan": "pro"
     },
     "linkedin-engine": {
       "host": "db.zijzgrnvvnpusaexvpsf.supabase.co",
       "last_keepalive_at": "2026-08-27T08:05:56-05:00",
       "last_keepalive_status": "ok",
-      "note": "Pro plan — pause protection not required. Keepalive still runs.",
+      "note": "Pro plan \u2014 pause protection not required. Keepalive still runs.",
       "plan": "pro"
     },
     "mrmohawk": {
       "days_since_keepalive": null,
       "host": "foarmmcezmmhnaexykcp.supabase.co",
-      "last_keepalive_at": "2026-08-28T07:29:34-05:00",
+      "last_keepalive_at": "2026-08-31T14:24:39-05:00",
       "last_keepalive_status": "ok",
       "plan": "free"
     }
