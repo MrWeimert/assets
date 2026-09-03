@@ -1,10 +1,11 @@
 name: MrMohawk Supabase keepalive
 
-# Runs Mon + Thu at 13:00 UTC (8am CT) — same cadence as the retired Perplexity cron.
-# Prevents free-tier pause by writing to public._keepalive.
+# Runs daily at 13:00 UTC (8am CT). GitHub Actions cron can lag several hours,
+# so daily cadence keeps us well inside the 7-day free-tier pause window even when
+# a run slips. Prevents pause by writing to public._keepalive.
 on:
   schedule:
-    - cron: '0 13 * * 1,4'
+    - cron: '0 13 * * *'
   workflow_dispatch: {}
 
 jobs:
