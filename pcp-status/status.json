@@ -1,23 +1,23 @@
 {
-  "generated_at": "2026-09-04T11:47:09-05:00",
+  "generated_at": "2026-09-05T07:09:59-05:00",
   "note": "Populated by scheduled tasks. Daily commit check updates repos[]. Mon/Thu keepalive updates supabase[].",
   "repos": {
     "epd-commerce-documentation": {
-      "last_checked_at": "2026-09-04",
+      "last_checked_at": "2026-09-05",
       "last_commit_at": "2026-05-11T06:27:00Z",
       "last_commit_message": "Merge pull request #1 from EasyPayDirect/EC-413-team-member-docs",
       "last_commit_sha": "cb54634",
       "url": "https://github.com/EasyPayDirect/epd-commerce-documentation"
     },
     "health-pipeline": {
-      "last_checked_at": "2026-09-04",
+      "last_checked_at": "2026-09-05",
       "last_commit_at": "2026-08-06T10:35:04Z",
       "last_commit_message": "auto: pipeline run 2026-08-06T10:35:04Z",
       "last_commit_sha": "5dd3236",
       "url": "https://github.com/MrWeimert/health-pipeline"
     },
     "linkedin-content-engine": {
-      "last_checked_at": "2026-09-04",
+      "last_checked_at": "2026-09-05",
       "last_commit_at": "2026-06-29T14:07:44Z",
       "last_commit_message": "Update team alert copy: label both engagement groups (#24)",
       "last_commit_sha": "20f52a6",
@@ -34,7 +34,7 @@
       "last_checked_at": "2026-09-04"
     },
     "yourautopod": {
-      "last_checked_at": "2026-09-04",
+      "last_checked_at": "2026-09-05",
       "url": "https://github.com/MrWeimert/Autopod",
       "last_commit_sha": "9f32725",
       "last_commit_at": "2026-08-27T15:23:45Z",
@@ -46,14 +46,14 @@
       "host": "db.rbqrnawgykdstdmzhtyo.supabase.co",
       "last_keepalive_at": "2026-08-27T08:05:56-05:00",
       "last_keepalive_status": "ok",
-      "note": "Pro plan \u2014 pause protection not required. Keepalive still runs.",
+      "note": "Pro plan — pause protection not required. Keepalive still runs.",
       "plan": "pro"
     },
     "linkedin-engine": {
       "host": "db.zijzgrnvvnpusaexvpsf.supabase.co",
       "last_keepalive_at": "2026-08-27T08:05:56-05:00",
       "last_keepalive_status": "ok",
-      "note": "Pro plan \u2014 pause protection not required. Keepalive still runs.",
+      "note": "Pro plan — pause protection not required. Keepalive still runs.",
       "plan": "pro"
     },
     "mrmohawk": {
