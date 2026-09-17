@@ -1,11 +1,15 @@
 name: MrMohawk Supabase keepalive
 
-# Runs daily at 13:00 UTC (8am CT). GitHub Actions cron can lag several hours,
-# so daily cadence keeps us well inside the 7-day free-tier pause window even when
-# a run slips. Prevents pause by writing to public._keepalive.
+# Runs twice daily at 13:00 and 01:00 UTC (8am + 8pm CT).
+# GitHub Actions cron can lag hours; twice-daily plus 7-day pause window
+# gives plenty of margin. Each run performs multiple queries against
+# public tables (not underscore-prefixed) to look like real user activity —
+# Supabase's pause detector appears to ignore or under-count PATCH-only
+# traffic to a single _keepalive row.
 on:
   schedule:
     - cron: '0 13 * * *'
+    - cron: '0 1 * * *'
   workflow_dispatch: {}
 
 jobs:
@@ -17,42 +21,87 @@ jobs:
       - name: Checkout assets
         uses: actions/checkout@v4
 
-      - name: PATCH _keepalive row
-        id: patch
+      - name: Multi-query activity burst
+        id: burst
         env:
           SUPABASE_KEY: ${{ secrets.MRMOHAWK_SUPABASE_KEY }}
+          SUPABASE_URL: https://foarmmcezmmhnaexykcp.supabase.co
         run: |
           set -euo pipefail
           NOW_ISO=$(TZ=America/Chicago date -Iseconds)
           echo "now=$NOW_ISO" >> "$GITHUB_OUTPUT"
 
-          HTTP_CODE=$(curl -sS -o /tmp/resp.json -w '%{http_code}' \
-            -X PATCH \
-            "https://foarmmcezmmhnaexykcp.supabase.co/rest/v1/_keepalive?id=eq.1" \
-            -H "apikey: $SUPABASE_KEY" \
-            -H "Authorization: Bearer $SUPABASE_KEY" \
-            -H "Content-Type: application/json" \
+          H_APIKEY="apikey: $SUPABASE_KEY"
+          H_AUTH="Authorization: Bearer $SUPABASE_KEY"
+          H_CT="Content-Type: application/json"
+
+          fail=0
+
+          # 1) PATCH the _keepalive row (existing behavior — kept for continuity)
+          CODE=$(curl -sS -o /tmp/r1.json -w '%{http_code}' \
+            -X PATCH "$SUPABASE_URL/rest/v1/_keepalive?id=eq.1" \
+            -H "$H_APIKEY" -H "$H_AUTH" -H "$H_CT" \
             -H "Prefer: return=representation" \
             -d "{\"last_ping_at\":\"$NOW_ISO\"}")
+          echo "1) PATCH _keepalive -> HTTP $CODE"
+          cat /tmp/r1.json; echo
+          [[ "$CODE" == 2* ]] || fail=1
 
-          echo "http_code=$HTTP_CODE" >> "$GITHUB_OUTPUT"
-          echo "HTTP $HTTP_CODE"
-          cat /tmp/resp.json
-          echo
+          # 2) SELECT from _keepalive (a genuine read)
+          CODE=$(curl -sS -o /tmp/r2.json -w '%{http_code}' \
+            "$SUPABASE_URL/rest/v1/_keepalive?id=eq.1&select=id,last_ping_at,ping_count" \
+            -H "$H_APIKEY" -H "$H_AUTH")
+          echo "2) GET _keepalive  -> HTTP $CODE"
+          cat /tmp/r2.json; echo
+          [[ "$CODE" == 2* ]] || fail=1
 
-          # Fail loudly if not 2xx or if response is empty (silent write failure).
-          if [[ "$HTTP_CODE" != 2* ]]; then
-            echo "::error::MrMohawk keepalive failed with HTTP $HTTP_CODE"
+          # 3) Discover a real public table and SELECT one row from it.
+          #    This exercises the "user database activity" path Supabase's
+          #    detector cares about, not just underscore-prefixed rows.
+          CODE=$(curl -sS -o /tmp/tables.json -w '%{http_code}' \
+            "$SUPABASE_URL/rest/v1/" \
+            -H "$H_APIKEY" -H "$H_AUTH")
+          echo "3a) list tables -> HTTP $CODE"
+          # OpenAPI JSON — pull first non-underscore table name
+          TABLE=$(python3 -c "
+          import json, sys
+          try:
+              d = json.load(open('/tmp/tables.json'))
+              paths = d.get('paths', {})
+              for p in paths:
+                  name = p.lstrip('/')
+                  if name and not name.startswith('_') and '/' not in name and name != 'rpc':
+                      print(name)
+                      break
+          except Exception:
+              pass
+          ")
+          echo "3b) picked table: '$TABLE'"
+
+          if [[ -n "$TABLE" ]]; then
+            CODE=$(curl -sS -o /tmp/r3.json -w '%{http_code}' \
+              "$SUPABASE_URL/rest/v1/$TABLE?limit=1" \
+              -H "$H_APIKEY" -H "$H_AUTH")
+            echo "3c) SELECT $TABLE -> HTTP $CODE"
+            head -c 400 /tmp/r3.json; echo
+            [[ "$CODE" == 2* ]] || echo "::warning::public table SELECT returned $CODE (non-fatal)"
+          else
+            echo "::warning::no non-underscore public table found; skipping public SELECT"
+          fi
+
+          # Fail loudly if the core PATCH failed.
+          if [[ "$fail" != 0 ]]; then
+            echo "::error::MrMohawk keepalive: core write/read failed"
             exit 1
           fi
-          if ! grep -q '"id":1' /tmp/resp.json; then
-            echo "::error::Response did not contain id:1 — write did not commit"
+          if ! grep -q '"id":1' /tmp/r1.json; then
+            echo "::error::PATCH response did not contain id:1 — write did not commit"
             exit 1
           fi
 
       - name: Update status.json
         env:
-          NOW_ISO: ${{ steps.patch.outputs.now }}
+          NOW_ISO: ${{ steps.burst.outputs.now }}
         run: |
           set -euo pipefail
           python3 <<'PY'
