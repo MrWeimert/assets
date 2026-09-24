@@ -1,26 +1,26 @@
 {
-  "generated_at": "2026-09-24T00:51:28-05:00",
+  "generated_at": "2026-09-24T07:04:19-05:00",
   "note": "Populated by scheduled tasks. Daily commit check updates repos[]. Mon/Thu keepalive updates supabase[].",
   "repos": {
     "epd-commerce-documentation": {
-      "last_checked_at": "2026-09-23",
+      "last_checked_at": "2026-09-24",
       "last_commit_at": "2026-05-11T06:27:00Z",
       "last_commit_message": "Merge pull request #1 from EasyPayDirect/EC-413-team-member-docs",
       "last_commit_sha": "cb54634",
       "url": "https://github.com/EasyPayDirect/epd-commerce-documentation"
     },
     "health-pipeline": {
-      "last_checked_at": "2026-09-23",
+      "last_checked_at": "2026-09-24",
       "last_commit_at": "2026-08-06T10:35:04Z",
       "last_commit_message": "auto: pipeline run 2026-08-06T10:35:04Z",
       "last_commit_sha": "5dd3236",
       "url": "https://github.com/MrWeimert/health-pipeline"
     },
     "linkedin-content-engine": {
-      "last_checked_at": "2026-09-23",
-      "last_commit_at": "2026-09-22T02:20:42Z",
-      "last_commit_message": "Fix scheduled video uploads and fail closed without processed media (#30)",
-      "last_commit_sha": "52666d5",
+      "last_checked_at": "2026-09-24",
+      "last_commit_at": "2026-09-23T16:20:45Z",
+      "last_commit_message": "Repair analytics storage and visibility for all posts (#31)",
+      "last_commit_sha": "1bad82d",
       "url": "https://github.com/MrWeimert/linkedin-content-engine"
     },
     "merchantalternatives": {
@@ -34,7 +34,7 @@
       "last_checked_at": "2026-09-23"
     },
     "yourautopod": {
-      "last_checked_at": "2026-09-23",
+      "last_checked_at": "2026-09-24",
       "url": "https://github.com/MrWeimert/Autopod",
       "last_commit_sha": "9f32725",
       "last_commit_at": "2026-08-27T15:23:45Z",
